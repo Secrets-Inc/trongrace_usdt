@@ -4,21 +4,11 @@ import styles from '../styles/Home.module.css';
 import Navbar from '../components/Navbar';
 import Link from "next/link";
 import Cover from '../components/Cover';
+import TronGrace from './trongrace';
 
 const Home: NextPage = () => {
   
-  const renderNode = (node:any, level:any) => (
-    <li key={node.id}>
-      <i className=
-      "las la-star"></i>
-      {`${node.id} (${node.amount} USDT)`}
-      {level < 4 && node.children.length > 0 && (
-        <ul style={{ listStyleType: 'none', marginLeft: '1rem' }}>
-          {node.children.map((child:any) => renderNode(child, level + 1))}
-        </ul>
-      )}
-    </li>
-  );
+  return <TronGrace/>;
   return <>
     <Head>
       <title>Tron Grace - Invest Now</title>
