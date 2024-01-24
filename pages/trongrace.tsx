@@ -8,39 +8,28 @@ const TronGrace: NextPage = () => {
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="/TronGrace_files/cows.css" />
     <script src="/TronGrace_files/analytics.js" type="text/javascript"></script>
-
-<script type="text/javascript" src="/TronGrace_files/bundle-playback.js"></script>
-<script type="text/javascript" src="/TronGrace_files/wombat.js"></script>
-<script>{'window.RufflePlayer=window.RufflePlayer||{};window.RufflePlayer.config={"autoplay":"on","unmuteOverlay":"hidden"};'}</script>
-<script type="text/javascript" src="/TronGrace_files/ruffle.js"></script>
-<script src="/TronGrace_files/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/TronGrace_files/banner-styles.css"/>
-<link rel="stylesheet" type="text/css" href="/TronGrace_files/iconochive.css"/>
-   
+    <script type="text/javascript" src="/TronGrace_files/bundle-playback.js"></script>
+    <script type="text/javascript" src="/TronGrace_files/wombat.js"></script>
+    <script>{'window.RufflePlayer=window.RufflePlayer||{};window.RufflePlayer.config={"autoplay":"on","unmuteOverlay":"hidden"};'}</script>
+    <script type="text/javascript" src="/TronGrace_files/ruffle.js"></script>
+    <script src="/TronGrace_files/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/TronGrace_files/banner-styles.css"/>
+    <link rel="stylesheet" type="text/css" href="/TronGrace_files/iconochive.css"/>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>TronGrace</title>
     <meta name="description" content="TronGrace.online Next generation community program"/>
     <meta name="keywords" content="dApp, tron network, tron platform, defi, decentralized network program, TronGrace, TronGrace.online"/>
-    
     <meta name="robots" content="index, follow"/>
-    
     <link rel="apple-touch-icon" sizes="180x180" href="https://web.archive.org/web/20221208185040im_/https://trongrace1.space/apple-touch-icon.png"/>
     <link rel="icon" type="image/png" sizes="32x32" href="https://web.archive.org/web/20221208185040im_/https://trongrace1.space/favicon-32x32.png"/>
     <link rel="icon" type="image/png" sizes="16x16" href="https://web.archive.org/web/20221208185040im_/https://trongrace1.space/favicon-16x16.png"/>
     <link rel="mask-icon" href="https://web.archive.org/web/20221208185040im_/https://trongrace1.space/safari-pinned-tab.svg" color="#5bbad5"/>
     <meta name="msapplication-TileColor" content="#da532c"/>
     <meta name="theme-color" content="#ffffff"/>
-
-
-
-
     <link rel="stylesheet" href="/TronGrace_files/style532d.css"/>
-
-
     <link rel="stylesheet" href="/TronGrace_files/line-awesome.min.css"/>
     <link rel="stylesheet" href="/TronGrace_files/chicken.css" />
-
     <link rel="stylesheet" href="/TronGrace_files/bootstrap.min.css"/>
     <script src="/TronGrace_files/jquery-3.5.1.min.js"></script>
     <script src="/TronGrace_files/bootstrap.min.js"></script>
@@ -48,310 +37,14 @@ const TronGrace: NextPage = () => {
 
 <body data-new-gr-c-s-check-loaded="14.1150.0" data-gr-ext-installed="">
  
-    {/* <div className="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered" role="document">
-            <div className="modal-content">
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-                <div className="modal-body">
-                    <div className="text-center">
-                        <h2>PERSONAL WALLET</h2>
-                        <p>Your <img src="/TronGrace_files/tronicon.png" alt="">
-                            <span>TRX</span> wallet address:</p>
-                    </div>
-                    {/* <form action="#!" method="post">
-                        <input className="form-control" id="walletAddress" placeholder="loading" readonly=""/>
-                    </form> */}
-
-
-                    {/* <div className="item-boxes">
-                        <div className="row">
-                            <div className="col-md-6 item-box">
-                                <div className="item-min">
-                                    <div className="top-item">
-                                        <img src="/TronGrace_files/item-1.png" className="float-left" alt="">
-                                        <span className="float-left">Your current daily rewards:</span>
-                                    </div>
-                                    <strong>+</strong><strong id="userPercentRate">0</strong><strong>%</strong>
-                                </div>
-                            </div>
-                            <div className="col-md-6 item-box">
-                                <div className="item-min bg-min">
-                                    <div className="top-item">
-                                        <img src="/TronGrace_files/item-2.png" className="float-left mob-min" alt=""/>
-                                        <div className="list float-left">
-                                            <p className="mb-0">
-                                                Basic Rewards:+1%<br/>
-                                                Hold-bonus: <b>+</b><b id="holdPercentRate">0</b><b>%</b><br/>
-                                                Contract bonus: <b>+</b><b>0.0%</b><b id="contractBonusRate" style={{visibility: 'hidden'}}>0</b><br/>
-                                                Leader bonus: <b>+</b><b id="leaderBonusRate">0</b><b>%</b><br/>
-                                                Community bonus : <b>+</b><b id="communityBonusRate">0</b><b>%</b><br/>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-12">
-                                <hr/>
-                            </div>
-                            <div className="col-md-6 item-box">
-                                <div className="item-min">
-                                    <div className="top-item">
-                                        <span className="float-left"> Available withdraw balance</span>
-                                    </div>
-                                    <div className="egs">
-                                        <img src="/TronGrace_files/item-3.png" alt=""/>
-                                        <strong id="userAvailable">0</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-6 item-box">
-                                <div className="item-min bg-right">
-                                    <div className="top-item text-center">
-                                        <span> Request withdraw</span>
-                                        <a href="#!" id="withdrawbutton"><i className="fa fa-link"></i> WITHDRAW </a>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div> *
-
-                    <div className="with-text">
-                        <p>
-                            Click Withdraw button, and you will get instantly all your deposits earnings with a single
-                            transaction. Your personal hold-bonus will be reset. When withdrawing then you should have
-                            between 4-100 TRX on your wallet balance for blockchain fees. Withdraw fee increases
-                            gradually as the number of deposits increases. </p>
-                    </div>
-
-                    <hr/>
-
-                    <div className="item-boxes mb-2">
-                        <div className="row">
-                            <div className="col-md-6 item-box mb-4">
-                                <div className="item-min">
-                                    <div className="top-item">
-                                        <span className="float-left"> Total Deposited</span>
-                                    </div>
-                                    <div className="egs">
-                                        <img src="/TronGrace_files/item-3.png" alt=""/>
-                                        <strong id="totalInvested">0</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-6 item-box mb-4">
-                                <div className="item-min bg-right">
-                                    <div className="top-item">
-                                        <span className="float-right text-right">Number of deposits: <span style={{color: '#6daefe'}} id="totalNumberOfDeposits">0</span> <br/>
-                                            <br/> <span style={{display:'none'}} id="userCheckpoint"></span></span>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div className="col-md-6 item-box">
-                                <div className="item-min">
-                                    <div className="top-item">
-                                        <span className="float-left">Total earned</span>
-                                    </div>
-                                    <div className="egs">
-                                        <img src="/TronGrace_files/item-3.png" alt=""/>
-                                        <strong id="totalEarned">0</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-6 item-box">
-                                <div className="item-min bg-right">
-                                    <div className="top-item text-right">
-                                        <span className="float-right">Total withdrawn</span>
-                                    </div>
-                                    <div className="egs float-right">
-                                        <strong className="mr-2" id="totalWithdrawn">0</strong>
-                                        <img style={{transform: 'scale(-1, 1)', marginRight: '0'}} src="/TronGrace_files/item-3.png" alt=""/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr/>
-
-
-                    <div className="referral-link">
-                        <h5>COPY REFERRAL LINK</h5>
-                        <input type="text" id="reflinkdisplay" placeholder="loading" readonly=""/>
-                        <a href="javascript:copyFunction()" onclick="myFunction()"><i className="fa fa-link"></i> COPY</a>
-                        <p>
-                            Share this link with your partners to get referral rewards <br/>
-                            You should have active deposit to unlock affiliate bonuses! </p>
-                    </div>
-                    <script>
-                        function myFunction() {
-                            var copyText = document.getElementById("reflinkdisplay");
-                            copyText.select();
-                            copyText.setSelectionRange(0, 99999)
-                            document.execCommand("copy");
-                            alert("Copied : " + copyText.value);
-                        }
-                    </script>
-                    <div className="item-boxes ">
-                        <div className="row">
-                            <div className="col-md-6 item-box mb-2">
-                                <div className="item-min">
-                                    <div className="top-item">
-                                        <span className="float-left">Referral rewards:</span>
-                                    </div>
-                                    <div className="egs">
-                                        <img src="/TronGrace_files/item-3.png" alt=""/>
-                                        <strong id="refRewards">0</strong>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-6 item-box mb-2">
-                                <div className="item-min bg-right">
-                                    <div className="top-item pl-3">
-                                        <img src="/TronGrace_files/signal.png" className="mt-3 signal float-left" alt=""/>
-                                        <div className="list float-left ml-0 pl-3" style={{width: '75%'}}>
-                                            <p className="mb-0 w-50  float-left" style={{lineHeight: '15px'}}>
-                                                1st Level: <b id="ref1"> 0 </b><br/>
-                                                2nd Level: <b id="ref2">0</b><br/>
-                                                3rd Level: <b id="ref3">0</b><br/>
-                                                4th Level: <b id="ref4"> 0</b><br/>
-                                                5th Level: <b id="ref5">0</b><br/>
-                                                6th Level: <b id="ref6">0</b>
-                                            </p>
-                                            <p className="mb-0 w-50  float-left" style={{lineHeight: '15px'}}>
-                                                7th Level: <b id="ref7">0 </b><br/>
-                                                8th Level: <b id="ref8">0</b> <br/>
-                                                9th Level: <b id="ref9">0</b> <br/>
-                                                10th Level: <b id="ref10">0</b> <br/>
-                                                11th Level: <b id="ref11">0</b>
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div className="col-md-12 text-center">
-                                <a href="https://t.me/successpowerteamv2" target="_blank" className="linked"><i className="fa fa-link"></i> PROMO MATERIALS</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div> */}
-
-{/*
-    // <div className="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle2" aria-hidden="true">
-    //     <div className="modal-dialog modal-dialog-centered" role="document">
-    //         <div className="modal-content">
-    //             <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-    //                 <span aria-hidden="true">×</span>
-    //             </button>
-    //             <div className="modal-body">
-    //                 <div className="text-center">
-    //                     <h2>MAKE NEW CONTRIBUTION</h2>
-    //                     <p className="mt-4">Specify deposit <span className="ballon">TRX</span> amount here:</p>
-    //                 </div>
-    //                 <form action="#!" method="post">
-    //                     <input type="text" className="form-control" id="trxValue1" value="1000"/>
-    //                 </form>
-
-
-    //                 <span id="contributeAddresss" style={{color:'#fff', display:'flex'}}>Loading...<div className="loader"></div>
-    //                 </span>
-    //                 <div className="referral-link text-center" id="contributeAddress" style={{display:'none'}}> <a href="#!" id="investButton1"><i className="fa fa-link"></i> CONTRIBUTION</a></div>
-
-
-    //                 <div className="what-lorem">
-    //                     <img src="/TronGrace_files/user (6).png" alt=""/> <span>upline partner wallet:</span><br/>
-    //                     <a href="#!" id="upline">No upline</a>
-    //                 </div>
-
-    //                 <hr/>
-
-    //                 <ul className="lorem-ul">
-    //                     <li><i className="fa fa-warning"></i> <span>IMPORTANT!</span> Do not forget about blockchain fee!
-    //                         You should have <b>40-60 TRX </b> more on your wallet, or your transaction will get *out of
-    //                         energy* status! </li>
-    //                     <li><i className="fa fa-check"></i> Minimum contribution amount <span>100 TRX</span>
-
-    //                     </li>
-    //                     <li><i className="fa fa-check"></i> We are working only with: <span>TRON (TRX) </span>
-    //                         cryptocurrency</li>
-    //                     <li><i className="fa fa-check"></i> Your contribution will be activated after <span>1 confirmation
-    //                         </span> in blockchain</li>
-    //                     <li><i className="fa fa-check"></i> Withdrawable rewards come instantly to your secure wallet
-    //                         balance’, which is accessible only to You</li>
-    //                 </ul>
-
-    //             </div>
-
-    //         </div>
-    //     </div>
-    // </div>*/}
-
-
-{/*
-    <div className="modal fade" id="exampleModal69" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle2" aria-hidden="true">
-        <div className="modal-dialog" role="document">
-            <div className="modal-content">
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-                <div className="modal-body">
-                    <div className="text-center">
-                        <h2>New Smart Contract</h2>
-                    </div>
-                    <!-- <form action="#" method="post">
-                    <input type="text" className="form-control" id="trxValue1" value="1000">
-                </form> -->
-                    <div className="referral-link text-center" id="contributeAddress"> <a href="https://web.archive.org/web/20221208185040/https://trongrace.io/" target="_blank" id="investButton1"><i className="fa fa-link"></i> TronGrace.io</a></div>
-
-                    <!-- <div className="what-lorem">
-                    <img src="assets/img/user%20(6).png" alt=""> <span>upline partner wallet:</span><br/>
-                    <a href="#" id="upline">New Link</a>
-                </div>
-
-                <hr/>
-
-                <ul className="lorem-ul">
-                    <li><i className="fa fa-warning"></i> <span>IMPORTANT!</span>  Do not forget about blockchain fee! You should have <b>40-60 TRX </b> more on your wallet, or your transaction will get *out of energy* status!                    </li>
-                    <li><i className="fa fa-check"></i> Minimum contribution amount <span>100 TRX</span>
-                        
-                    </li>
-                    <li><i className="fa fa-check"></i>  We are working only with:                        <span>TRON (TRX) </span> cryptocurrency</li>
-                    <li><i className="fa fa-check"></i> Your contribution will be activated after                        <span>1 confirmation </span> in blockchain</li>
-                    <li><i className="fa fa-check"></i> Withdrawable rewards come instantly to your secure wallet balance’, which is accessible only to You</li>
-                </ul> -->
-
-                </div>
-
-            </div>
-        </div>
-    </div></div></div>*/}
-
-
-
-
-
-
-
-
-
-
-
     <div id="mobileMenu">
         <a href="#!" className="closes"><i className="fa fa-times-circle-o"></i></a>
         <div className="menu">
             <a className="normal-link scroll" href="#TronGrace">About us</a>
-            <a className="normal-link  scroll" href="#!papers">Marketing Plan</a>
-            <a className="normal-link" data-toggle="modal" data-target="#exampleModal" href="#!">Personal Wallet</a>
-            <a className="normal-link" data-toggle="modal" data-target="#exampleModal2" href="#!">Contribution</a>
+            <a className="normal-link  scroll" href="#papers">Plans</a>
+            <a className="normal-link  scroll" href="#code">Referral Link</a>
+            <a className="normal-link scroll" href="#affiliate">Affiliate</a>
+            <a className="deposit" href="#!">Contract</a>
 
         </div>
     </div>
@@ -368,13 +61,14 @@ const TronGrace: NextPage = () => {
                     <div className="float-right">
                         <a className="normal-link scroll" href="#TronGrace">About us</a>
                         <a className="normal-link  scroll" href="#papers">Plans</a>
-                        <a className="normal-link" data-toggle="modal" data-target="#exampleModal" href="#!">Affiliate</a>
-                        <a className="deposit" data-toggle="modal" data-target="#exampleModal2" href="#!">Contract</a>
+                        <a className="normal-link  scroll" href="#code">Referral Link</a>
+                        <a className="normal-link scroll" href="#affiliate">Affiliate</a>
+                        <a className="deposit" href="#!">Contract</a>
                     </div>
-                    <button id="hamburger_btn" type="button" className="btn btn-outline-light btn-sm"><i className="fa fa-bars"></i>
-                    </button>
+                    {/* <button id="hamburger_btn" type="button" className="btn btn-outline-light btn-sm"><i className="fa fa-bars"></i>
+                    </button> */}
                 </div>
-                <div className="customBtn">
+                {/* <div className="customBtn">
                     <a href="#!" target="_blank">
                         <span> </span>
                         <span> </span>
@@ -382,7 +76,7 @@ const TronGrace: NextPage = () => {
                         <span> </span>
                         New Smart Contract
                     </a>
-                </div>
+                </div> */}
                 <div className="col-md-6 header-left">
                     <h2 style={{textTransform: 'uppercase'}}>
                         <span>Earn 5 - 18% Daily</span></h2>
@@ -932,7 +626,7 @@ const TronGrace: NextPage = () => {
     </script>
 
     <script src="/TronGrace_files/jquery.min.js"></script>
-    <script src="/TronGrace_files/bootstrap.min(1).js"></script>
+    <script src="/TronGrace_files/bootstrap.min.js"></script>
     <script src="/TronGrace_files/popper.min.js"></script>
     <script src="/TronGrace_files/swiper.min.js"></script>
     <script src="/TronGrace_files/design532d.js"></script>
