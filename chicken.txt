@@ -1,0 +1,44 @@
+import React from 'react';
+import styles from './YourStyles.module.css'; // Import your styles
+
+const MLMTree = () => {
+  const treeData = [
+    {
+      id: '0x00',
+      amount: 500,
+      children: [
+        {
+          id: '0x001',
+          amount: 200,
+          children: [],
+        },
+      ],
+    },
+    // Add more levels or members as needed
+  ];
+
+  const renderNode = (node, level) => (
+    <li key={node.id}>
+      <i className="las la-star"></i>
+      {`${node.id} (${node.amount} USDT)`}
+      {level < 4 && node.children.length > 0 && (
+        <ul>
+          {node.children.map((child) => renderNode(child, level + 1))}
+        </ul>
+      )}
+    </li>
+  );
+
+  return (
+    <section className={styles.futureSection}>
+      <h3>Referral Tree</h3>
+      <div className={styles.futureItemBlock}>
+        <ul className={styles.futureColumn}>
+          {treeData.map((rootNode) => renderNode(rootNode, 1))}
+        </ul>
+      </div>
+    </section>
+  );
+};
+
+export default MLMTree;
