@@ -5,7 +5,7 @@ import Head from 'next/head';
 import TronWeb, { Contract } from 'tronweb';
 var crypto = require('crypto');
 import { useAdapters } from "../utils/AdaptersContext";
-const sdk = require('api')('@tron/v4.7.3#17d20r2ql9cidams');
+// const sdk = require('api')('@tron/v4.7.3#17d20r2ql9cidams');
 
 
 const TronGrace: NextPage = () => {
@@ -58,11 +58,11 @@ const TronGrace: NextPage = () => {
           }
           
           // look into
-        sdk.getTransactionInfoByContractAddress({contractAddress: contractAddress})
-        .then((data:any) => {
-            setTransactionCount(data['data'].length)
-        })
-        .catch((err:any) => console.error(err));
+        // sdk.getTransactionInfoByContractAddress({contractAddress: contractAddress})
+        // .then((data:any) => {
+        //     setTransactionCount(data['data'].length)
+        // })
+        // .catch((err:any) => console.error(err));
 
 
           contract.getSiteStats().call().then((result:any) => {
@@ -80,6 +80,24 @@ const TronGrace: NextPage = () => {
     const sunAmount = trxAmount * 1000000;
     return sunAmount;
   }
+
+  
+  async function connectWallet() {
+    if(connectedAddress == null) {
+        try {
+            await adapters[1].connect();            
+        } catch (error) {
+            console.log('connect:' + error);
+        }
+    } else {
+      try {
+        await adapters[1].disconnect();
+      } catch (error) {
+        console.log('disconnect:' + error);
+      }
+    }
+  }
+
   
   
   function getRefFromUrl() {
@@ -215,7 +233,7 @@ const withdraw = async () => {
                                 </div>
                                
                             )}
-                            <a href="#!" className="btn-purple">Connect Wallet</a>
+                            <a href="#!" onClick={() => connectWallet()} className="btn-purple">{connectedAddress ?  "Wallet Connected"  : "Connect Wallet"}</a>
                             <a href="/TronGrace_files/TronGrace.pdf" target="_blank" className="btn-white" style={{marginLeft: '10px'}}>Presentation (PDF) </a>
                 </div>
 
