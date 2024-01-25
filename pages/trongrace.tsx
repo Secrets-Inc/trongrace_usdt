@@ -1,7 +1,128 @@
 import type { NextPage } from 'next';
+import { useState } from "react";
+import { useEffect } from "react";
 import Head from 'next/head';
+import TronWeb, { Contract } from 'tronweb';
+var crypto = require('crypto');
+import { useAdapters } from "../utils/AdaptersContext";
+const sdk = require('api')('@tron/v4.7.3#17d20r2ql9cidams');
+
 
 const TronGrace: NextPage = () => {
+    const adapters = useAdapters();
+    const connectedAddress = adapters[1].address;
+    const [transactionAmount, setTransactionAmount] = useState<number>(0);
+    const [userbalance, setUserBalance] = useState(0)
+    const [totalROI, setTotalROI] = useState(0)
+    const [depositsCount, setDepositsCount] = useState(0)
+    const [referralTotalEarned, setReferralTotalEarned] = useState(0)
+    const [contract, setContract] = useState<any>(null);
+    // site-specific
+    const [allUsersCount, setAllUsersCount] = useState(0)
+    const [totalDepositsNumber, setTotalDepositsNumber] = useState(0)
+    const [transactionCount, setTransactionCount] = useState(10)
+    const [totalInvested, setTotalInvested] = useState(0)
+    const [totalWithdrawn, setTotalWithdrawn] = useState(0)
+    const [platformAge, setPlatformAge] = useState(0)
+    let contractAddress = '';
+    let defAdminAddress = '';
+
+    //init tronweb
+    var privateKey = crypto.randomBytes(32).toString('hex');
+    
+
+    const tronWeb = new TronWeb({
+      fullHost: 'https://api.trongrid.io',
+      headers: { 'TRON-PRO-API-KEY': '4e836296-0309-4890-9fb0-8fb6c63021ec' },
+      privateKey: privateKey
+    });
+
+
+    useEffect(() => {
+        async function init() {
+          const newAccount = await tronWeb.createAccount();
+          let rcontract = await tronWeb.contract().at(contractAddress); 
+          setContract(rcontract)
+        }
+  
+        init()
+         
+          if(connectedAddress != null) {
+            contract.getUserStats().call().then((result:any) => {
+                // [userData.deposits.length, balanceInTrx, totalROI, referralTotal]
+                setUserBalance(typeof result[1] === 'number'? result[1] : Number(result[1]));
+                setTotalROI(typeof result[2] === 'number'? result[2] : Number(result[2]));
+                setDepositsCount(typeof result[0] === 'number'? result[0] : Number(result[0]));
+                setReferralTotalEarned(typeof result[3] === 'number'? result[3] : Number(result[3]));
+            }).catch((err:any) => console.log(err))
+          }
+          
+          // look into
+        sdk.getTransactionInfoByContractAddress({contractAddress: contractAddress})
+        .then((data:any) => {
+            setTransactionCount(data['data'].length)
+        })
+        .catch((err:any) => console.error(err));
+
+
+          contract.getSiteStats().call().then((result:any) => {
+            // [totalInvested, totalDeposits, allUsers.length, totalWithdrawn, (block.timestamp - contractCreation) / SECONDS_IN_A_DAY]
+            setAllUsersCount(typeof result[2] === 'number'? result[2] : Number(result[2]));
+            setTotalDepositsNumber(typeof result[1] === 'number'? result[1] : Number(result[1]));
+            setTotalInvested(typeof result[0] === 'number'? result[0] : Number(result[0]));
+            setTotalWithdrawn(typeof result[3] === 'number'? result[3] : Number(result[3]));
+            setPlatformAge(typeof result[4] === 'number'? result[4] : Number(result[4]));
+        }).catch((err:any) => console.log(err))
+      }, [])
+
+  // Convert TRX to SUN
+  function trxToSun(trxAmount: number) {
+    const sunAmount = trxAmount * 1000000;
+    return sunAmount;
+  }
+  
+  
+  function getRefFromUrl() {
+    const currentUrl = window.location.href;
+    const urlParams = new URLSearchParams(currentUrl);
+    const refValue = urlParams.get('ref');
+    return refValue == null ? defAdminAddress : refValue;
+  }
+         
+const deposit = async () => {
+    if(transactionAmount == 0) {
+        return;
+    }
+    try {
+      const depositValue = trxToSun(transactionAmount); // Specify the amount you want to deposit
+    //   const feeLimitInSun = 5000000;
+  
+      const tx = await contract.deposit(depositValue, getRefFromUrl())
+        .send({
+        callValue: depositValue,
+        // feeLimit: feeLimitInSun,
+      });
+        // Clear the input field
+        setTransactionAmount(0);
+      alert("Deposit successful!");
+    } catch (error) {
+      console.error("Error depositing USDT:", error);
+    }
+  };
+
+const withdraw = async () => {
+    if(transactionAmount == 0) {
+        return;
+    }
+//   const feeLimitInSun = 5000000;
+  const result = await contract.withdraw(transactionAmount, false).send({
+    callValue: 0, 
+    // feeLimit: feeLimitInSun, // Set an appropriate fee limit
+    shouldPollResponse: true, 
+  });
+  // Clear the input field
+  setTransactionAmount(0);
+  };
   
     return <>
 <Head>
@@ -82,28 +203,36 @@ const TronGrace: NextPage = () => {
                         <span>Earn 5 - 18% Daily</span></h2>
                     <h4 style={{fontSize:'32px', color: '#fff'}}>
                         100% Decentralized, No Admins </h4>
-                        <h4>
                             <p>
                                 Accelerate gains with 15% in referral commissions (4 - levels) 
                             </p>
+                            { connectedAddress && (
+                                <div>
+                                     <p>Your Balance: <b>{userbalance} USDT</b></p>
+                                     <p>Total ROI: <b>{totalROI} USDT</b></p>
+                                     <p>Number of Deposits : <b>{depositsCount}</b></p>
+                                     <p>Total Referral Earned: <b>{referralTotalEarned} USDT</b></p>
+                                </div>
+                               
+                            )}
                             <a href="#!" className="btn-purple">Connect Wallet</a>
                             <a href="/TronGrace_files/TronGrace.pdf" target="_blank" className="btn-white" style={{marginLeft: '10px'}}>Presentation (PDF) </a>
-                </h4>
                 </div>
 
 
                 <div className="col-md-6 header-right">
                     <div className="video">
-                        <h5 style={{color: '#fff'}}>Enter amount to deposit/withdraw</h5>
+                        <h5 style={{color: '#fff'}}>Enter amount to deposit/withdraw (USDT)</h5>
                         <br/>
                         <div className="center-input">
-                            <input type="number" className="form-control" id="numericInput" 
+                            <input type="number" className="form-control" id="numericInput" value={transactionAmount}
+                                onChange={(e) => setTransactionAmount(Number(e.target.value))}
                             pattern="[0-9]*" placeholder="Enter amount" required/>
                         </div>
                         <br/>
                         <div className="a-center-input">
-                            <a href="#!" className="btn-purple">Deposit</a>
-                            <a href="#!" className="btn-white" style={{marginLeft: '10px'}}>Withdraw </a>
+                            <a href="#!" className="btn-purple" onClick={deposit}>Deposit</a>
+                            <a href="#!" className="btn-white" onClick={withdraw} style={{marginLeft: '10px'}}>Withdraw </a>
                            </div>
                             
                     </div>
@@ -218,12 +347,12 @@ const TronGrace: NextPage = () => {
                             <div className="col-md-7 pl-0">
                                 <div className="whats-text">
                                     <h5>Platform details: </h5>
-                                    <p className="mb-0">Number of transactions: 120</p>
-                                    <p className="mb-0">Number of users: 10</p>
-                                    <p className="mb-0">Number of deposits: 1200</p>
-                                    <p className="mb-0">Total Withdrawn: 1200 USDT</p>
-                                    <p className="mb-0">Total Deposited: 1200 USDT</p>
-                                    <p className="mb-0">Platform Age: 45 days</p>
+                                    <p className="mb-0">Number of transactions: {transactionCount}</p>
+                                    <p className="mb-0">Number of users: {allUsersCount}</p>
+                                    <p className="mb-0">Number of deposits: {totalDepositsNumber}</p>
+                                    <p className="mb-0">Total Withdrawn: {totalWithdrawn} USDT</p>
+                                    <p className="mb-0">Total Deposited: {totalInvested} USDT</p>
+                                    <p className="mb-0">Platform Age: {platformAge} days</p>
                                 </div>
                             </div>
                         </div>

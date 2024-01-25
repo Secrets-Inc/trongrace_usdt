@@ -16,6 +16,7 @@
     "@tronweb3/tronwallet-adapter-tronlink": "^1.1.9",
     "@tronweb3/tronwallet-adapter-walletconnect": "^1.0.5",
     "@tronweb3/walletconnect-tron": "^2.0.0",
+    "api": "^6.1.1",
     "crypto": "^1.0.1",
     "next": "^13.4.19",
     "react": "^18.2.0",

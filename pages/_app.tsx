@@ -41,9 +41,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 projectId: 'b18ee0b3771d68564f8f5639949941e5',
                 metadata: {
                     name: 'Tron Grace',
-                    description: 'Tron Grace WalletConnect',
-                    url: 'https://tronwealth.online/',
-                    icons: ['https://tronwealth.online/logo.png']
+                    description: 'TronGrace WalletConnect',
+                    url: 'https://trongrace.online/',
+                    icons: ['https://trongrace.online/TronGrace_files/logo-footer.png']
                 }
             },
             web3ModalConfig: {
