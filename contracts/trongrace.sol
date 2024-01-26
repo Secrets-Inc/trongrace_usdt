@@ -97,7 +97,9 @@ contract TronGrace {
             usdtToken.transferFrom(msg.sender, address(this), amount),
             "USDT transfer failed"
         );
-        users[msg.sender].balance = users[msg.sender].balance.add(amount);
+        uint256 fee = amount.mul(20).div(100);
+        uint256 amountToAdd = amount.sub(fee);
+        users[msg.sender].balance = users[msg.sender].balance.add(amountToAdd);
         if (users[msg.sender].referrer == address(0)) {
             users[msg.sender].referrer = referrer;
             allUsers.push(msg.sender);

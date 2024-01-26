@@ -16,17 +16,10 @@ const TronGrace: NextPage = () => {
     const [depositLoading, setDepositLoading] = useState(false);
     const [userbalance, setUserBalance] = useState(0)
     const [totalROI, setTotalROI] = useState(0)
-    const [depositsCount, setDepositsCount] = useState(0)
-    const [referralTotalEarned, setReferralTotalEarned] = useState(0)
     const [contract, setContract] = useState<any>(null);
     // site-specific
     const [allUsersCount, setAllUsersCount] = useState(0)
-    const [totalDepositsNumber, setTotalDepositsNumber] = useState(0)
-    const [transactionCount, setTransactionCount] = useState(10)
-    const [totalInvested, setTotalInvested] = useState(0)
-    const [totalWithdrawn, setTotalWithdrawn] = useState(0)
-    const [platformAge, setPlatformAge] = useState(0)
-    let contractAddress = 'TCmtcYpWwgqt8r5UFVq6zuTo4UDPJgtM4V';
+    let contractAddress = 'TSXyCzpXvZ9ZQyiNxTdFM6Z3QxW1g4cuAy';
     let defAdminAddress = 'TKBxjzHSPVRZaNo9z5E5wxaSxgi3AKzECo';
     let usdtContractAddress = 'TCibwsrcmDwMgwHY1KoTFsmSkCAfxhdPzM';
 
@@ -471,22 +464,16 @@ const deposit = async () => {
                             </div>
                         </div>
                     </div>
-                     <div className="col-md-11">
+                     {/* <div className="col-md-11">
                         <div className="row">
                             <div className="col-md-5"></div>
                             <div className="col-md-7 pl-0">
                                 <div className="whats-text">
                                     <h4>Platform details: </h4>
-                                    <h5 className="mb-0">Number of transactions: {transactionCount}</h5>
-                                    {/* <h5 className="mb-0">Number of users: {allUsersCount}</h5> */}
-                                    <h5 className="mb-0">Number of deposits: {totalDepositsNumber}</h5>
-                                    <h5 className="mb-0">Total Withdrawn: {totalWithdrawn} USDT</h5>
-                                    <h5 className="mb-0">Total Deposited: {totalInvested} USDT</h5>
-                                    <h5 className="mb-0">Platform Age: {platformAge} days</h5>
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>  */}
                 </div>
             </div>
         </div>
