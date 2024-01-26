@@ -54,9 +54,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             },
         });
         return [
-            // tronLinkAdapter,
-            walletConnectAdapter,
-            tronLinkAdapter
+            tronLinkAdapter,
+            walletConnectAdapter
         ];
     }, []);
 

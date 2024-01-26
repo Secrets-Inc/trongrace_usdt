@@ -19,12 +19,12 @@ const TronGrace: NextPage = () => {
     const [contract, setContract] = useState<any>(null);
     // site-specific
     const [allUsersCount, setAllUsersCount] = useState(0)
-    let contractAddress = 'TSXyCzpXvZ9ZQyiNxTdFM6Z3QxW1g4cuAy';
+    let contractAddress = 'TRpS5N26RSAVz5mAwMA7YnfekD5shHNjHs';
     let defAdminAddress = 'TKBxjzHSPVRZaNo9z5E5wxaSxgi3AKzECo';
-    let usdtContractAddress = 'TCibwsrcmDwMgwHY1KoTFsmSkCAfxhdPzM';
+    let usdtContractAddress = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t';
 
     const tronWeb = new TronWeb({
-      fullHost: 'https://nile.trongrid.io',
+      fullHost: 'https://api.trongrid.io',
       headers: { 'TRON-PRO-API-KEY': '4e836296-0309-4890-9fb0-8fb6c63021ec' },
     });
 
