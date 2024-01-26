@@ -53,13 +53,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 },
             },
         });
-        // const bitKeepAdapter = new BitKeepAdapter();
-        // const tokenPocketAdapter = new TokenPocketAdapter();
-        // const okxwalletAdapter = new OkxWalletAdapter();
-        return [tronLinkAdapter,
-            //  bitKeepAdapter, tokenPocketAdapter, okxwalletAdapter,
+        return [
+            // tronLinkAdapter,
             walletConnectAdapter,
-            //  ledger
+            tronLinkAdapter
         ];
     }, []);
 
