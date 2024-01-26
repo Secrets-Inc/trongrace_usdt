@@ -14,6 +14,7 @@ const TronGrace: NextPage = () => {
     const [transactionAmount, setTransactionAmount] = useState<number>(0);
     const [loading, setLoading] = useState(false);
     const [depositLoading, setDepositLoading] = useState(false);
+    const [withdrawLoading, setWithdrawLoading] = useState(false);
     const [userbalance, setUserBalance] = useState(0)
     const [totalROI, setTotalROI] = useState(0)
     const [contract, setContract] = useState<any>(null);
@@ -210,6 +211,7 @@ const deposit = async () => {
         return;
     }
 
+    setWithdrawLoading(true);
     try {
         // Prepare the parameters for the withdraw function
         const functionSelector = 'withdraw(uint256,bool,bool)';
@@ -242,8 +244,10 @@ const deposit = async () => {
         console.log('Withdraw transaction receipt', receipt);
 
         setTransactionAmount(0);  // Reset the transaction amount
+        setWithdrawLoading(false);
     } catch (error) {
         console.error('Error during withdrawal:', error);
+        setWithdrawLoading(false);
     }
 };
 
@@ -345,7 +349,7 @@ const deposit = async () => {
 
                 <div className="col-md-6 header-right">
                     <div className="video">
-                        <h5 style={{color: '#fff'}}>Enter amount to deposit/withdraw (USDT)</h5>
+                        <h5 style={{color: '#fff'}}>To deposit/withdraw (USDT) (2 approvals)</h5>
                         <br/>
                         <div className="center-input">
                             <input type="number" className="form-control" id="numericInput" value={transactionAmount}
@@ -355,7 +359,7 @@ const deposit = async () => {
                         <br/>
                         <div className="a-center-input">
                             <a href="#!" className="btn-purple" onClick={deposit}>{depositLoading ? '...check your wallet' :'Deposit'}</a>
-                            <a href="#!" className="btn-white" onClick={withdraw} style={{marginLeft: '10px'}}>Withdraw </a>
+                            <a href="#!" className="btn-white" onClick={withdraw} style={{marginLeft: '10px'}}>{withdrawLoading ?'...check your wallet':'Withdraw' }</a>
                            </div>
                             
                     </div>
