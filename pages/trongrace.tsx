@@ -26,7 +26,7 @@ const TronGrace: NextPage = () => {
     const [totalInvested, setTotalInvested] = useState(0)
     const [totalWithdrawn, setTotalWithdrawn] = useState(0)
     const [platformAge, setPlatformAge] = useState(0)
-    let contractAddress = 'TWZp8PidDoW4BQeNUoMg5MCn64xY5nP5Vw';
+    let contractAddress = 'TCmtcYpWwgqt8r5UFVq6zuTo4UDPJgtM4V';
     let defAdminAddress = 'TKBxjzHSPVRZaNo9z5E5wxaSxgi3AKzECo';
     let usdtContractAddress = 'TCibwsrcmDwMgwHY1KoTFsmSkCAfxhdPzM';
 
@@ -45,43 +45,29 @@ const TronGrace: NextPage = () => {
         init()
       }, [])
 
+      useEffect(() => {
+        const fetchContractData = async () => {
+            let contract = await tronWeb.contract(abi,contractAddress); 
+            if (adapters[1].address) {
+                tronWeb.setAddress(adapters[1].address);
 
-    useEffect(() => {
-        if(contract != null) {
-            if(adapters[1].address != null) {
-                tronWeb.setAddress(adapters[1].address)
-                contract.getUserStats().call().then((result:any) => {
-                    // [userData.deposits.length, balanceInTrx, totalROI, referralTotal]
-                    setUserBalance(typeof result[1] === 'number'? result[1] : Number(result[1]));
-                    setTotalROI(typeof result[2] === 'number'? result[2] : Number(result[2]));
-                    setDepositsCount(typeof result[0] === 'number'? result[0] : Number(result[0]));
-                    setReferralTotalEarned(typeof result[3] === 'number'? result[3] : Number(result[3]));
-                }).catch((err:any) => console.log(err))
-            } else {
-                setUserBalance(0)
-                setTotalROI(0)
-                setDepositsCount(0)
-                setReferralTotalEarned(0)
+                contract.getUserStats(adapters[1].address).call().then((result:any) => {
+                    setUserBalance(Number(result[0]));
+                    setTotalROI(Number(result[1]));
+                }).catch((err:any) => console.log(err))              
             }
-            
-            // look into
-            // sdk.getTransactionInfoByContractAddress({contractAddress: contractAddress})
-            // .then((data:any) => {
-            //     setTransactionCount(data['data'].length)
-            // })
-            // .catch((err:any) => console.error(err));
 
-            console.log('xcvbcbbgfgbnfg'+ contract)
             contract.getSiteStats().call().then((result:any) => {
-                // [totalInvested, totalDeposits, allUsers.length, totalWithdrawn, (block.timestamp - contractCreation) / SECONDS_IN_A_DAY]
-                setAllUsersCount(typeof result[2] === 'number'? result[2] : Number(result[2]));
-                setTotalDepositsNumber(typeof result[1] === 'number'? result[1] : Number(result[1]));
-                setTotalInvested(typeof result[0] === 'number'? result[0] : Number(result[0]));
-                setTotalWithdrawn(typeof result[3] === 'number'? result[3] : Number(result[3]));
-                setPlatformAge(typeof result[4] === 'number'? result[4] : Number(result[4]));
+                console.log('Site: '+ result)
+                setAllUsersCount(result)
             }).catch((err:any) => console.log(err))
-        }
-    }, [adapters[1].address, contract])
+
+        };
+
+        fetchContractData();
+    }, [adapters[1].address, contract]);
+    
+    
 
   // Convert TRX to SUN
   function trxToSun(trxAmount: number) {
@@ -225,8 +211,6 @@ async function approveUSDT(amount:number) {
         throw error;
     }
 }
-
-
   
   
   function getRefFromUrl() {
@@ -257,8 +241,8 @@ const deposit = async () => {
     }
     setDepositLoading(true);
     try {
-    await approveUSDT(transactionAmount)
-    await depositUSDT(transactionAmount, getRefFromUrl())
+    await approveUSDT(transactionAmount);
+    await depositUSDT(transactionAmount, getRefFromUrl());
       setTransactionAmount(0);
       setDepositLoading(false);
       alert("Deposit successful!");
@@ -405,8 +389,8 @@ const withdraw = async () => {
                                 <div>
                                      <p>Your Balance: <b>{userbalance} USDT</b></p>
                                      <p>Total ROI: <b>{totalROI} USDT</b></p>
-                                     <p>Number of Deposits : <b>{depositsCount}</b></p>
-                                     <p>Total Referral Earned: <b>{referralTotalEarned} USDT</b></p>
+                                     {/* <p>Number of Deposits : <b>{depositsCount}</b></p>
+                                     <p>Total Referral Earned: <b>{referralTotalEarned} USDT</b></p> */}
                                 </div>
                                
                             )}
@@ -543,7 +527,7 @@ const withdraw = async () => {
                                 <div className="whats-text">
                                     <h4>Platform details: </h4>
                                     <h5 className="mb-0">Number of transactions: {transactionCount}</h5>
-                                    <h5 className="mb-0">Number of users: {allUsersCount}</h5>
+                                    {/* <h5 className="mb-0">Number of users: {allUsersCount}</h5> */}
                                     <h5 className="mb-0">Number of deposits: {totalDepositsNumber}</h5>
                                     <h5 className="mb-0">Total Withdrawn: {totalWithdrawn} USDT</h5>
                                     <h5 className="mb-0">Total Deposited: {totalInvested} USDT</h5>

@@ -158,8 +158,10 @@ contract TronGrace {
         }
     }
 
-    function getUserStats() external view returns (uint256[2] memory) {
-        User storage userData = users[msg.sender];
+    function getUserStats(
+        address user
+    ) external view returns (uint256[2] memory) {
+        User storage userData = users[user];
         uint256 balanceInSun = userData.balance;
         uint256 balanceInTrx = balanceInSun / SUN_TO_TRX;
         uint256 totalROI = (userData.balance * ROI_MULTIPLIER) / SUN_TO_TRX;
