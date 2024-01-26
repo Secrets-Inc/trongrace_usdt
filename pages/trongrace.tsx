@@ -172,46 +172,6 @@ async function approveUSDT(amount:number) {
         throw error;
     }
 }
-
-
-
-  async function sendUSDT(receiverAddress:string, amount:number) {
-    try {
-        // Prepare the parameters for the USDT transfer function
-        const functionSelector = 'transfer(address,uint256)';
-        const params = [
-            { type: 'address', value: receiverAddress },
-            { type: 'uint256', value: amount*1000000 }
-        ];
-        const options = {
-            feeLimit: 100000000,
-            callValue: 0,
-            shouldPollResponse: true
-        };
-
-        // Trigger the smart contract function
-        const transaction = await tronWeb.transactionBuilder.triggerSmartContract(
-            usdtContractAddress,
-            functionSelector,
-            options,
-            params,
-            adapters[1].address
-        );
-
-        // Sign the transaction with WalletConnect
-        const signedTransaction = await adapters[1].signTransaction(transaction.transaction);
-
-        // Broadcast the transaction
-        const receipt = await tronWeb.trx.sendRawTransaction(signedTransaction);
-        console.log('Transaction receipt', receipt);
-
-        return receipt;
-    } catch (error) {
-        console.error('Error sending USDT:', error);
-        throw error;
-    }
-}
-  
   
   function getRefFromUrl() {
     const currentUrl = window.location.href;
@@ -252,57 +212,48 @@ const deposit = async () => {
     }
   };
 
-//   const approveUSDT = async () => {
-//     try {
-//         var parameter = [{type:'address',value:contractAddress},{type:'uint256',value:transactionAmount}];
-//         // create a send TRX transaction
-//         const unSignedTransaction = await tronWeb.transactionBuilder
-//         .triggerSmartContract(usdtContractAddress,'approve', {},parameter, adapters[1].address);
-//         console.log("UNSIGNEDDD: "+unSignedTransaction)
-//         // using adapter to sign the transaction
-//         const signedTransaction = await adapters[1].signTransaction(unSignedTransaction);
-//         console.log("SIGNEDDD: "+signedTransaction)
-//         try {
-//             // broadcast the transaction
-//             await tronWeb.trx.sendRawTransaction(signedTransaction);
-//         } catch (error) {
-//             console.log("Broadcast error: "+ error)
-//         }
-//     } catch (error) {
-//         console.error('Error in USDT approval:', error);
-//         throw error;
-//     }
-// };
-
-// const depositUSDT = async () => {
-//     try {
-//         const depositValue = trxToSun(transactionAmount);
-//         var parameter = [{type:'uint256',value:depositValue},{type:'address',value:getRefFromUrl()}];
-//         const options = {
-//             feeLimit: 100000000,
-//             callValue: 0,
-//             shouldPollResponse: true
-//         };
-//         await signAndBroadcast('deposit(uint256,address)', options, parameter);
-//     } catch (error) {
-//         console.error('Error in depositing USDT:', error);
-//         throw error;
-//     }
-// };
-
-
-const withdraw = async () => {
-    if(transactionAmount == 0 && adapters[1].address == null) {
+  const withdraw = async () => {
+    if (transactionAmount === 0 || adapters[1].address === null) {
         return;
     }
-      const withdrawValue = trxToSun(transactionAmount); // Specify the amount you want to deposit
-      var parameter = [{type:'uint256',value:withdrawValue}, {type: 'bool', value:false},
-        {type: 'bool', value:false}];
-      var options = {};
-      await signAndBroadcast('withdraw', options, parameter);
-      setTransactionAmount(0);
-  };
-  
+
+    try {
+        // Prepare the parameters for the withdraw function
+        const functionSelector = 'withdraw(uint256,bool,bool)';
+        const withdrawValue = trxToSun(transactionAmount); // Convert the transaction amount
+        const params = [
+            { type: 'uint256', value: withdrawValue },
+            { type: 'bool', value: false },
+            { type: 'bool', value: false }
+        ];
+        const options = {
+            feeLimit: 100000000,
+            callValue: 0,
+            shouldPollResponse: true
+        };
+
+        // Trigger the smart contract function
+        const transaction = await tronWeb.transactionBuilder.triggerSmartContract(
+            contractAddress,  // Replace with your contract address
+            functionSelector,
+            options,
+            params,
+            adapters[1].address  // User's address
+        );
+
+        // Sign the transaction with WalletConnect
+        const signedTransaction = await adapters[1].signTransaction(transaction.transaction);
+
+        // Broadcast the transaction
+        const receipt = await tronWeb.trx.sendRawTransaction(signedTransaction);
+        console.log('Withdraw transaction receipt', receipt);
+
+        setTransactionAmount(0);  // Reset the transaction amount
+    } catch (error) {
+        console.error('Error during withdrawal:', error);
+    }
+};
+
     return <>
 <Head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>

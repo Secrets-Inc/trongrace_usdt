@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.11;
 
-//Vm TVm22VuHmhxAuxN9f1LfpmrJTWS8aAYG9R
+//Nile Testnet
+//Contract Address TCibwsrcmDwMgwHY1KoTFsmSkCAfxhdPzM
+//its a TRC20 / ERC20 token supposed to mimic exactly USDT on Tron
+// Initial Holder TKBxjzHSPVRZaNo9z5E5wxaSxgi3AKzECo
 
 interface ERC20Basic {
     function totalSupply() external view returns (uint);
