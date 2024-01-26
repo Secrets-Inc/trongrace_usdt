@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Head from 'next/head';
 import TronWeb, { Contract } from 'tronweb';
-var crypto = require('crypto');
 import { useAdapters } from "../utils/AdaptersContext";
 import { abi } from './abi';
 // const sdk = require('api')('@tron/v4.7.3#17d20r2ql9cidams');
@@ -11,8 +10,9 @@ import { abi } from './abi';
 
 const TronGrace: NextPage = () => {
     const adapters = useAdapters();
-    const connectedAddress = adapters[1].address;
+    // const connectedAddress = adapters[1].address;
     const [transactionAmount, setTransactionAmount] = useState<number>(0);
+    const [loading, setLoading] = useState(false);
     const [userbalance, setUserBalance] = useState(0)
     const [totalROI, setTotalROI] = useState(0)
     const [depositsCount, setDepositsCount] = useState(0)
@@ -28,20 +28,13 @@ const TronGrace: NextPage = () => {
     let contractAddress = 'TUUb2aZLry39aGpxPqwgP1MvPC9K1tVW46';
     let defAdminAddress = 'TXym8kL95guC2t635D9SnbbJxqy588AKXm';
 
-    //init tronweb
-    var privateKey = crypto.randomBytes(32).toString('hex');
-    
-
     const tronWeb = new TronWeb({
       fullHost: 'https://api.trongrid.io',
       headers: { 'TRON-PRO-API-KEY': '4e836296-0309-4890-9fb0-8fb6c63021ec' },
-      privateKey: privateKey
     });
-
 
     useEffect(() => {
         async function init() {
-          const newAccount = await tronWeb.createAccount();
           let rcontract = await tronWeb.contract(abi,contractAddress); 
           console.log("dgdggfggfhg"+rcontract)
           setContract(rcontract)
@@ -53,7 +46,8 @@ const TronGrace: NextPage = () => {
 
     useEffect(() => {
         if(contract != null) {
-            if(connectedAddress != null) {
+            if(adapters[1].address != null) {
+                tronWeb.setAddress(adapters[1].address)
                 contract.getUserStats().call().then((result:any) => {
                     // [userData.deposits.length, balanceInTrx, totalROI, referralTotal]
                     setUserBalance(typeof result[1] === 'number'? result[1] : Number(result[1]));
@@ -61,6 +55,11 @@ const TronGrace: NextPage = () => {
                     setDepositsCount(typeof result[0] === 'number'? result[0] : Number(result[0]));
                     setReferralTotalEarned(typeof result[3] === 'number'? result[3] : Number(result[3]));
                 }).catch((err:any) => console.log(err))
+            } else {
+                setUserBalance(0)
+                setTotalROI(0)
+                setDepositsCount(0)
+                setReferralTotalEarned(0)
             }
             
             // look into
@@ -80,7 +79,7 @@ const TronGrace: NextPage = () => {
                 setPlatformAge(typeof result[4] === 'number'? result[4] : Number(result[4]));
             }).catch((err:any) => console.log(err))
         }
-    }, [connectedAddress, contract])
+    }, [adapters[1].address, contract])
 
   // Convert TRX to SUN
   function trxToSun(trxAmount: number) {
@@ -90,17 +89,24 @@ const TronGrace: NextPage = () => {
 
   
   async function connectWallet() {
-    if(connectedAddress == null) {
+    console.log('pressed'+adapters[1].address);
+    setLoading(true);
+    if(adapters[1].address == null) {
         try {
-            await adapters[1].connect();            
+            await adapters[1].connect(); 
+            console.log('ssspressed'+adapters[1].address);  
+            setLoading(false);         
         } catch (error) {
             console.log('connect:' + error);
+            setLoading(false);  
         }
     } else {
       try {
         await adapters[1].disconnect();
+        setLoading(false);  
       } catch (error) {
         console.log('disconnect:' + error);
+        setLoading(false);  
       }
     }
   }
@@ -113,22 +119,32 @@ const TronGrace: NextPage = () => {
     const refValue = urlParams.get('ref');
     return refValue == null ? defAdminAddress : refValue;
   }
+
+  async function signAndBroadcast(functionName:string,options:any, parameter:any) {
+    try {
+      const unSignedTransaction = await tronWeb.transactionBuilder
+                .triggerSmartContract(contractAddress,functionName, options,parameter,adapters[1].address);
+        // using adapter to sign the transaction
+        const signedTransaction = await adapters[1].signTransaction(unSignedTransaction);
+        // broadcast the transaction
+        await tronWeb.trx.sendRawTransaction(signedTransaction);        
+    } catch (error) {
+        console.log("Sign and Broadcast error", error)
+    }
+  }
          
 const deposit = async () => {
-    if(transactionAmount == 0) {
+    if(transactionAmount == 0 && adapters[1].address==null) {
         return;
     }
     try {
       const depositValue = trxToSun(transactionAmount); // Specify the amount you want to deposit
-    //   const feeLimitInSun = 5000000;
-  
-      const tx = await contract.deposit(depositValue, getRefFromUrl())
-        .send({
-        callValue: depositValue,
-        // feeLimit: feeLimitInSun,
-      });
-        // Clear the input field
-        setTransactionAmount(0);
+      var parameter = [{type:'uint256',value:depositValue},{type:'address',value:getRefFromUrl()}];
+      var options = {
+                callValue:depositValue,
+            };
+      await signAndBroadcast('deposit', options, parameter);
+      setTransactionAmount(0);
       alert("Deposit successful!");
     } catch (error) {
       console.error("Error depositing USDT:", error);
@@ -136,17 +152,15 @@ const deposit = async () => {
   };
 
 const withdraw = async () => {
-    if(transactionAmount == 0) {
+    if(transactionAmount == 0 && adapters[1].address == null) {
         return;
     }
-//   const feeLimitInSun = 5000000;
-  const result = await contract.withdraw(transactionAmount, false, false).send({
-    callValue: 0, 
-    // feeLimit: feeLimitInSun, // Set an appropriate fee limit
-    shouldPollResponse: true, 
-  });
-  // Clear the input field
-  setTransactionAmount(0);
+      const withdrawValue = trxToSun(transactionAmount); // Specify the amount you want to deposit
+      var parameter = [{type:'uint256',value:withdrawValue}, {type: 'bool', value:false},
+        {type: 'bool', value:false}];
+      var options = {};
+      await signAndBroadcast('withdraw', options, parameter);
+      setTransactionAmount(0);
   };
   
     return <>
@@ -231,7 +245,7 @@ const withdraw = async () => {
                             <p>
                                 Accelerate gains with 15% in referral commissions (4 - levels) 
                             </p>
-                            { connectedAddress && (
+                            { adapters[1].address && (
                                 <div>
                                      <p>Your Balance: <b>{userbalance} USDT</b></p>
                                      <p>Total ROI: <b>{totalROI} USDT</b></p>
@@ -240,7 +254,7 @@ const withdraw = async () => {
                                 </div>
                                
                             )}
-                            <a href="#!" onClick={() => connectWallet()} className="btn-purple">{connectedAddress ?  "Wallet Connected"  : "Connect Wallet"}</a>
+                            <a href="#!" onClick={() => connectWallet()} className="btn-purple">{ loading?'...loading': adapters[1].address ?  "..."+adapters[1].address.slice(-4)  : "Connect Wallet"}</a>
                             <a href="/TronGrace_files/TronGrace.pdf" target="_blank" className="btn-white" style={{marginLeft: '10px'}}>Presentation (PDF) </a>
                 </div>
 
@@ -371,13 +385,13 @@ const withdraw = async () => {
                             <div className="col-md-5"></div>
                             <div className="col-md-7 pl-0">
                                 <div className="whats-text">
-                                    <h5>Platform details: </h5>
-                                    <p className="mb-0">Number of transactions: {transactionCount}</p>
-                                    <p className="mb-0">Number of users: {allUsersCount}</p>
-                                    <p className="mb-0">Number of deposits: {totalDepositsNumber}</p>
-                                    <p className="mb-0">Total Withdrawn: {totalWithdrawn} USDT</p>
-                                    <p className="mb-0">Total Deposited: {totalInvested} USDT</p>
-                                    <p className="mb-0">Platform Age: {platformAge} days</p>
+                                    <h4>Platform details: </h4>
+                                    <h5 className="mb-0">Number of transactions: {transactionCount}</h5>
+                                    <h5 className="mb-0">Number of users: {allUsersCount}</h5>
+                                    <h5 className="mb-0">Number of deposits: {totalDepositsNumber}</h5>
+                                    <h5 className="mb-0">Total Withdrawn: {totalWithdrawn} USDT</h5>
+                                    <h5 className="mb-0">Total Deposited: {totalInvested} USDT</h5>
+                                    <h5 className="mb-0">Platform Age: {platformAge} days</h5>
                                 </div>
                             </div>
                         </div>
